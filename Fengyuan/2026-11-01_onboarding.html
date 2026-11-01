@@ -41,14 +41,34 @@
   .time{font-size:14px;color:var(--muted);margin-left:8px;font-weight:400}
   .step{counter-increment:step}
   footer{margin-top:80px;color:var(--muted);font-size:14px;border-top:1px solid var(--line);padding-top:16px}
-  @media print{pre{white-space:pre-wrap}h2{page-break-before:auto}}
+  .tabs{position:sticky;top:0;z-index:9;background:rgba(255,255,255,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);margin:0 -20px 24px;padding:12px 20px}
+  .tabs .in{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .tabs .lbl{color:var(--muted);font-size:15px;margin-right:4px}
+  .tab{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 18px;font:600 16px/1.3 inherit;cursor:pointer;color:var(--ink)}
+  .tab:hover{border-color:var(--blue);color:var(--blue)}
+  .tab.on{background:var(--blue);border-color:var(--blue);color:#fff}
+  .pick{border-left-color:var(--amber);background:#fff8c5}
+  body.picked .pick{display:none}
+  body.picked .you{background:#dafbe1;border-color:#1a7f37;color:#116329}
+  tr.me td{background:#dafbe1;font-weight:600}
+  @media print{pre{white-space:pre-wrap}h2{page-break-before:auto}.tabs{position:static}}
 </style>
 </head>
 <body>
 <main>
+<div class="tabs"><div class="in"><span class="lbl">我是:</span>
+<button class="tab" data-tab="Doubao">Doubao</button>
+<button class="tab" data-tab="Mirror">Mirror</button>
+<button class="tab" data-tab="Mingren">Mingren</button>
+<button class="tab" data-tab="Jerry">Jerry</button>
+</div></div>
 
 <h1>ECOP 上手教程:让 AI 助手在你电脑上干活</h1>
-<p class="sub">写给 Doubao、Mirror、Mingren、Jerry。不需要任何编程基础。全程照着复制粘贴,大约 40 分钟。有卡住的地方直接截图发给 Fengyuan。</p>
+<p class="sub">写给 Doubao、Mirror、Mingren、Jerry。不需要任何编程基础。全程照着复制粘贴,大约 40 分钟。</p>
+<div class="box pick"><b>先点上面你的名字。</b>点了以后,全文所有命令里的 <span class="you">&lt;名字&gt;</span> 都会自动换成你的名字,直接复制就能用,不用自己改。</div>
+<div class="box why"><b>卡住了怎么办,顺序是这样:</b>
+<ol style="margin:0"><li><b>先问你的 AI 助手</b>。把终端里的报错整段复制给它(或者截图拖进去),说「这是什么意思,我该怎么办」。装到第 5 节之后你就有 AI 了;第 5 节之前,用网页版的 Claude 或 ChatGPT 问也一样。十有八九它能直接带你解决。</li>
+<li><b>AI 讲了还是不懂,再找 Fengyuan</b>。把终端窗口整个截图发过来,加一句你在教程第几节。</li></ol></div>
 
 <div class="box why"><b>先说清楚我们在做什么。</b>
 <p>ECOP 团队用一套很简单的方法协作:每个人有一个自己的「工作间」(叫 <b>harness</b>,就是电脑上的一个文件夹),里面住着一个 AI 助手(Claude Code 或 Codex,看你用哪个)。你每天开工让它看一眼大家昨天干了什么,收工让它把你今天干的事记进共享日志。日志和计划放在 GitHub 上,所有人都能看。不开会、不填表,靠这个同步。</p>
@@ -74,12 +94,12 @@
 <h2 id="s0">0. 开始前的准备<span class="time">5 分钟</span></h2>
 <ol>
 <li><b>一个 GitHub 账号</b>,而且已经被拉进了 <code>ECOP-Design</code> 这个组织(organization)。检查方法:浏览器打开 <a href="https://github.com/ECOP-Design">github.com/ECOP-Design</a>,如果能看到 <code>person</code>、<code>plan</code> 和一个以你名字命名的仓库,就对了。看不到就找 Doubao(组织管理员)拉你进去。</li>
-<li><b>知道自己的「名字」</b>。团队里每人一个固定英文名,后面所有命令里的 <span class="you">&lt;名字&gt;</span> 都替换成它,大小写要一样:
+<li><b>知道自己的「名字」</b>。团队里每人一个固定英文名,后面所有命令里出现的就是它,大小写要一样。点了顶上的标签,你那一行会变绿:
 <table><tr><th>你</th><th>名字</th><th>GitHub 账号</th></tr>
-<tr><td>Doubao</td><td><code>Doubao</code></td><td>rkayoperation-sys</td></tr>
-<tr><td>Mirror</td><td><code>Mirror</code></td><td>Mirror-Papaya</td></tr>
-<tr><td>Mingren</td><td><code>Mingren</code></td><td>Psyruto</td></tr>
-<tr><td>Jerry</td><td><code>Jerry</code></td><td>JerryHu0808</td></tr></table></li>
+<tr data-row="Doubao"><td>Doubao</td><td><code>Doubao</code></td><td>rkayoperation-sys</td></tr>
+<tr data-row="Mirror"><td>Mirror</td><td><code>Mirror</code></td><td>Mirror-Papaya</td></tr>
+<tr data-row="Mingren"><td>Mingren</td><td><code>Mingren</code></td><td>Psyruto</td></tr>
+<tr data-row="Jerry"><td>Jerry</td><td><code>Jerry</code></td><td>JerryHu0808</td></tr></table></li>
 <li><b>一个 AI 助手的账号</b>:用 Claude Code 就要 Claude 账号(Pro 或 Max),用 Codex 就要 ChatGPT 账号(Plus 以上)。两个都有的话,推荐 Claude Code,团队的规则文件是先按它写的。</li>
 <li><b>一台 Mac</b>。这份教程按 Mac 写。Windows 也能做,但坑多一些,Windows 用户看每一步下面折叠的「Windows 用户」小节,卡住了直接找 Fengyuan 一起装。</li>
 </ol>
@@ -150,12 +170,10 @@ winget install --id OpenJS.NodeJS.LTS -e</code></pre>
 <!-- ============================================================ -->
 <h2 id="s4">4. 下载你的 harness<span class="time">3 分钟</span></h2>
 <div class="box why"><b>harness 是什么。</b>就是一个文件夹,里面放着:给 AI 看的规则(<code>CLAUDE.md</code>,Codex 用户看的叫 <code>AGENTS.md</code>,内容一样)、三个预先写好的命令(<code>/update</code>、<code>/diary</code>、<code>/publish-html</code>)、团队共享的日志文件夹 <code>diary/</code> 和计划文件夹 <code>plan/</code>、以及你自己放工作文件的 <code>ecop/</code>。Fengyuan 已经给每个人在 GitHub 上建好了一份,名字替换好了,你只要下载下来。</div>
-<p>把下面的 <span class="you">&lt;名字&gt;</span> 换成你的名字(两处都要换,见第 0 节的表):</p>
-<pre><code>gh repo clone ECOP-Design/<span class="you">&lt;名字&gt;</span> ~/<span class="you">&lt;名字&gt;</span> -- --recurse-submodules</code></pre>
-<p>比如 Jerry 就是:</p>
-<pre><code>gh repo clone ECOP-Design/Jerry ~/Jerry -- --recurse-submodules</code></pre>
+<p>下面这条命令里的名字已经按你顶上选的填好了(没选的话先回顶上选):</p>
+<pre><code>gh repo clone ECOP-Design/<span class="you" data-name>&lt;名字&gt;</span> ~/<span class="you" data-name>&lt;名字&gt;</span> -- --recurse-submodules</code></pre>
 <p>然后走进去看一眼:</p>
-<pre><code>cd ~/<span class="you">&lt;名字&gt;</span>
+<pre><code>cd ~/<span class="you" data-name>&lt;名字&gt;</span>
 ls</code></pre>
 <div class="box ok"><b>成功的样子:</b>列出 <code>AGENTS.md  CLAUDE.md  README.md  archive  diary  ecop  plan</code>。再敲 <code>ls diary</code>,能看到五个人的文件夹和 README,说明共享日志也拉下来了。</div>
 <div class="box warn"><b>如果 <code>ls diary</code> 是空的</b>,跑一次 <code>git submodule update --init</code> 再看。</div>
@@ -172,7 +190,7 @@ ls</code></pre>
 <h3>选项 A:Claude Code</h3>
 <pre><code>npm install -g @anthropic-ai/claude-code</code></pre>
 <p>装完,进 harness 文件夹启动它:</p>
-<pre><code>cd ~/<span class="you">&lt;名字&gt;</span>
+<pre><code>cd ~/<span class="you" data-name>&lt;名字&gt;</span>
 claude</code></pre>
 <p>第一次启动会让你选主题(随便),然后要登录。选 <b>Claude account with subscription</b>,浏览器打开后登录你的 Claude 账号、点授权,回到终端。</p>
 <p>它可能会问「Do you trust the files in this folder?」,选 <b>Yes</b>。这是你自己的 harness,放心。</p>
@@ -180,7 +198,7 @@ claude</code></pre>
 
 <h3>选项 B:Codex</h3>
 <pre><code>npm install -g @openai/codex</code></pre>
-<pre><code>cd ~/<span class="you">&lt;名字&gt;</span>
+<pre><code>cd ~/<span class="you" data-name>&lt;名字&gt;</span>
 codex</code></pre>
 <p>第一次启动选 <b>Sign in with ChatGPT</b>,浏览器登录、授权,回到终端。</p>
 <div class="box ok"><b>成功的样子:</b>看到 Codex 的输入框。打一句「读一下 AGENTS.md 和 CLAUDE.md,告诉我我叫什么、我该怎么开始一天」,它能说出 <code>/update</code> 就对了。</div>
@@ -230,7 +248,7 @@ codex</code></pre>
 <p>你让 AI 做了一个网页(原型、报告、图表、Demo),想给队友或客户看,不用发文件、不用截图。跟它说:</p>
 <pre><code>/publish-html 那个文件.html</code></pre>
 <p>或者直接说「把这个网页发出去给我个链接」。几十秒后它给你一个链接,形如:</p>
-<pre><code>https://ecop-design.github.io/pages/<span class="you">&lt;名字&gt;</span>/2026-11-05_xxx.html</code></pre>
+<pre><code>https://ecop-design.github.io/pages/<span class="you" data-name>&lt;名字&gt;</span>/2026-11-05_xxx.html</code></pre>
 <p>任何人点开就能看,手机也行。所有人发过的页面在 <a href="https://ecop-design.github.io/pages/">ecop-design.github.io/pages/</a> 能找到。</p>
 <div class="box stop"><b>这些链接是全网公开的。</b>发之前 AI 会先读一遍内容、扫一遍有没有密码密钥,但最终责任在你:含客户数据的东西不要发。发错了也不要以为删掉就没事,GitHub 的历史记录删不干净。</div>
 
@@ -257,7 +275,7 @@ codex</code></pre>
 <tr><td>AI 一直问我「可以吗」</td><td>正常。按 <kbd>y</kbd>。烦了看第 6 节。</td></tr>
 <tr><td>AI 说要我输 <code>gh auth login</code> 之类的命令</td><td>它需要你本人在终端操作。退出 AI(<code>/exit</code>),在终端里跑,跑完再启动 AI。Claude Code 里也可以直接打 <code>!gh auth login</code>,感叹号开头的会当作终端命令。</td></tr>
 <tr><td>Homebrew 装了半天不动</td><td>网络慢,等。超过 20 分钟就 <kbd>Ctrl</kbd>+<kbd>C</kbd> 重跑。</td></tr>
-<tr><td>别的</td><td>截图整个终端窗口,发给 Fengyuan。截图比描述管用一百倍。</td></tr>
+<tr><td>别的</td><td>先把报错整段复制给你的 AI 助手,让它讲解、带你修。它搞不定,截图整个终端窗口发给 Fengyuan,说明在第几节。截图比描述管用一百倍。</td></tr>
 </table>
 
 <!-- ============================================================ -->
@@ -282,5 +300,23 @@ codex</code></pre>
 
 <footer>Fengyuan · 2026-11-01 · 源文件在 <code>leftrightworld/Fengyuan</code> 的 <code>ecop/team/</code>,有写错的地方告诉我。</footer>
 </main>
+<script>
+(function(){
+  var names=['Doubao','Mirror','Mingren','Jerry'];
+  function pick(n,push){
+    if(names.indexOf(n)<0)return;
+    document.body.classList.add('picked');
+    document.querySelectorAll('.tab').forEach(function(b){b.classList.toggle('on',b.dataset.tab===n)});
+    document.querySelectorAll('[data-name]').forEach(function(e){e.textContent=n});
+    document.querySelectorAll('tr[data-row]').forEach(function(r){r.classList.toggle('me',r.dataset.row===n)});
+    try{localStorage.setItem('ecop-name',n)}catch(e){}
+    if(push&&history.replaceState)history.replaceState(null,'','#'+n);
+  }
+  document.querySelectorAll('.tab').forEach(function(b){b.addEventListener('click',function(){pick(b.dataset.tab,true)})});
+  var h=location.hash.replace('#',''),saved=null;
+  try{saved=localStorage.getItem('ecop-name')}catch(e){}
+  if(names.indexOf(h)>=0)pick(h,false);else if(saved)pick(saved,false);
+})();
+</script>
 </body>
 </html>
