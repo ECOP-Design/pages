@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ECOP 上手教程:让 AI 助手在你电脑上干活</title>
+<style>
+  :root{--ink:#1f2328;--muted:#656d76;--line:#d0d7de;--bg:#fff;--soft:#f6f8fa;--blue:#0969da;--green:#1a7f37;--amber:#9a6700;--red:#cf222e}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.75 -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif}
+  main{max-width:800px;margin:0 auto;padding:40px 20px 100px}
+  h1{font-size:30px;line-height:1.3;margin:0 0 8px}
+  h2{font-size:23px;margin:64px 0 12px;padding-top:16px;border-top:2px solid var(--line)}
+  h3{font-size:18px;margin:32px 0 8px}
+  p,li{margin:0 0 10px}
+  ul,ol{padding-left:26px}
+  li{margin-bottom:8px}
+  .sub{color:var(--muted);margin-bottom:28px}
+  code{font:15px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:var(--soft);border:1px solid var(--line);border-radius:5px;padding:1px 6px}
+  pre{background:#0d1117;color:#e6edf3;border-radius:8px;padding:14px 16px;overflow:auto;font:15px/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;margin:10px 0 14px}
+  pre code{background:none;border:0;padding:0;color:inherit;font-size:inherit}
+  pre .c{color:#8b949e}
+  .box{border-left:4px solid var(--line);background:var(--soft);padding:12px 16px;border-radius:0 8px 8px 0;margin:14px 0}
+  .box p:last-child,.box ul:last-child{margin-bottom:0}
+  .ok{border-color:var(--green)} .ok b{color:var(--green)}
+  .why{border-color:var(--blue)} .why b{color:var(--blue)}
+  .warn{border-color:var(--amber)} .warn b{color:var(--amber)}
+  .stop{border-color:var(--red)} .stop b{color:var(--red)}
+  .you{display:inline-block;background:#fff8c5;border:1px solid #d4a72c;border-radius:5px;padding:0 6px;font-weight:600}
+  table{border-collapse:collapse;width:100%;margin:12px 0 18px;font-size:16px}
+  th,td{border:1px solid var(--line);padding:8px 12px;text-align:left;vertical-align:top}
+  th{background:var(--soft)}
+  details{border:1px solid var(--line);border-radius:8px;padding:10px 16px;margin:14px 0;background:#fff}
+  summary{cursor:pointer;font-weight:600}
+  details[open] summary{margin-bottom:8px}
+  nav.toc{background:var(--soft);border-radius:8px;padding:16px 22px;margin:24px 0 10px}
+  nav.toc ol{margin:0;columns:2;column-gap:30px}
+  nav.toc li{margin:0 0 4px;break-inside:avoid}
+  a{color:var(--blue);text-decoration:none} a:hover{text-decoration:underline}
+  kbd{font:14px ui-monospace,Menlo,monospace;background:#fff;border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:0 5px}
+  .time{font-size:14px;color:var(--muted);margin-left:8px;font-weight:400}
+  .step{counter-increment:step}
+  footer{margin-top:80px;color:var(--muted);font-size:14px;border-top:1px solid var(--line);padding-top:16px}
+  @media print{pre{white-space:pre-wrap}h2{page-break-before:auto}}
+</style>
+</head>
+<body>
+<main>
+
+<h1>ECOP 上手教程:让 AI 助手在你电脑上干活</h1>
+<p class="sub">写给 Doubao、Mirror、Mingren、Jerry。不需要任何编程基础。全程照着复制粘贴,大约 40 分钟。有卡住的地方直接截图发给 Fengyuan。</p>
+
+<div class="box why"><b>先说清楚我们在做什么。</b>
+<p>ECOP 团队用一套很简单的方法协作:每个人有一个自己的「工作间」(叫 <b>harness</b>,就是电脑上的一个文件夹),里面住着一个 AI 助手(Claude Code 或 Codex,看你用哪个)。你每天开工让它看一眼大家昨天干了什么,收工让它把你今天干的事记进共享日志。日志和计划放在 GitHub 上,所有人都能看。不开会、不填表,靠这个同步。</p>
+<p>要做到这件事,你的电脑需要三样东西:① 能和 GitHub 说话;② 有你的 harness 文件夹;③ 装好 AI 助手。这份教程就是带你把这三样装好。</p></div>
+
+<nav class="toc"><b>目录</b>
+<ol>
+<li><a href="#s0">开始前的准备</a></li>
+<li><a href="#s1">认识「终端」</a></li>
+<li><a href="#s2">装三个基础工具</a></li>
+<li><a href="#s3">把 GitHub 账号和电脑连起来</a></li>
+<li><a href="#s4">下载你的 harness</a></li>
+<li><a href="#s5">装 AI 助手(Claude Code 或 Codex)</a></li>
+<li><a href="#s6">可选:让 AI 不要每步都问你</a></li>
+<li><a href="#s7">每天怎么用:/update、干活、/diary</a></li>
+<li><a href="#s8">/publish-html:把网页发给别人看</a></li>
+<li><a href="#s9">第一次会话做什么</a></li>
+<li><a href="#s10">出问题了怎么办</a></li>
+<li><a href="#s11">名词解释</a></li>
+</ol></nav>
+
+<!-- ============================================================ -->
+<h2 id="s0">0. 开始前的准备<span class="time">5 分钟</span></h2>
+<ol>
+<li><b>一个 GitHub 账号</b>,而且已经被拉进了 <code>ECOP-Design</code> 这个组织(organization)。检查方法:浏览器打开 <a href="https://github.com/ECOP-Design">github.com/ECOP-Design</a>,如果能看到 <code>person</code>、<code>plan</code> 和一个以你名字命名的仓库,就对了。看不到就找 Doubao(组织管理员)拉你进去。</li>
+<li><b>知道自己的「名字」</b>。团队里每人一个固定英文名,后面所有命令里的 <span class="you">&lt;名字&gt;</span> 都替换成它,大小写要一样:
+<table><tr><th>你</th><th>名字</th><th>GitHub 账号</th></tr>
+<tr><td>Doubao</td><td><code>Doubao</code></td><td>rkayoperation-sys</td></tr>
+<tr><td>Mirror</td><td><code>Mirror</code></td><td>Mirror-Papaya</td></tr>
+<tr><td>Mingren</td><td><code>Mingren</code></td><td>Psyruto</td></tr>
+<tr><td>Jerry</td><td><code>Jerry</code></td><td>JerryHu0808</td></tr></table></li>
+<li><b>一个 AI 助手的账号</b>:用 Claude Code 就要 Claude 账号(Pro 或 Max),用 Codex 就要 ChatGPT 账号(Plus 以上)。两个都有的话,推荐 Claude Code,团队的规则文件是先按它写的。</li>
+<li><b>一台 Mac</b>。这份教程按 Mac 写。Windows 也能做,但坑多一些,Windows 用户看每一步下面折叠的「Windows 用户」小节,卡住了直接找 Fengyuan 一起装。</li>
+</ol>
+
+<!-- ============================================================ -->
+<h2 id="s1">1. 认识「终端」<span class="time">5 分钟</span></h2>
+<p>终端(Terminal)是一个黑底或白底的窗口,你在里面打一行字、按回车,电脑就执行。所有 AI 助手的命令行版本都在这里面跑。<b>我们要求一律在终端里用 AI 助手,不用网页版、不用 VS Code 插件</b>,原因后面会讲。</p>
+
+<h3>怎么打开</h3>
+<p>按 <kbd>⌘</kbd>+<kbd>空格</kbd>,输入 <code>Terminal</code>(或「终端」),回车。看到一个窗口,最后一行有个光标在闪,就是在等你输入。</p>
+
+<h3>只需要知道这四件事</h3>
+<ol>
+<li><b>一行就是一条命令</b>。打完按 <kbd>回车</kbd> 才会执行。没有回车什么都不会发生。</li>
+<li><b>复制粘贴</b>。本教程里黑底的框都是命令,整行复制,在终端里 <kbd>⌘</kbd>+<kbd>V</kbd> 粘贴,回车。一个框里有好几行就一行一行来。</li>
+<li><b>「当前文件夹」</b>。终端永远「站在」某个文件夹里,命令都针对这个文件夹。<code>cd 某个路径</code> 就是走到那个文件夹去。<code>~</code> 是你的个人主目录(就是访达里那个房子图标)。</li>
+<li><b>没报错就是成功</b>。很多命令成功了什么都不显示,直接回到光标。只有红字或 <code>error</code>、<code>not found</code>、<code>denied</code> 才是出问题。</li>
+</ol>
+<div class="box warn"><b>两个小提醒。</b>
+<ul><li>输入密码时屏幕上不会显示任何东西,连星号都没有,正常,打完回车就行。</li>
+<li>命令跑着没结束(光标不回来)想中断:按 <kbd>Ctrl</kbd>+<kbd>C</kbd>。</li></ul></div>
+
+<details><summary>Windows 用户</summary>
+<p>开始菜单搜 <code>PowerShell</code>,右键「以管理员身份运行」。下面的命令绝大部分一样,个别不同的地方会单独标。Claude Code 和 Codex 在 Windows 上更建议装在 WSL(Windows 里的 Linux)里跑,这一步比较绕,建议找 Fengyuan 一起装。</p></details>
+
+<!-- ============================================================ -->
+<h2 id="s2">2. 装三个基础工具<span class="time">10 分钟</span></h2>
+<p>需要三样:<b>git</b>(管文件版本)、<b>gh</b>(让终端能操作 GitHub)、<b>node</b>(AI 助手的运行环境)。Mac 上先装一个「软件管家」Homebrew,然后用它一次装完。</p>
+
+<h3>2.1 装 Homebrew</h3>
+<pre><code>/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"</code></pre>
+<p>中间会要你输入 Mac 开机密码,然后按一次回车确认。要等几分钟。装完它可能提示你再跑两行 <code>echo ... &gt;&gt; ~/.zprofile</code> 开头的命令,照着复制跑一下。</p>
+
+<h3>2.2 用 Homebrew 装 git、gh、node</h3>
+<pre><code>brew install git gh node</code></pre>
+
+<h3>2.3 检查</h3>
+<p><b>先关掉终端窗口,重新开一个</b>(很重要,新装的东西要重开才认得),然后:</p>
+<pre><code>git --version
+gh --version
+node --version</code></pre>
+<div class="box ok"><b>成功的样子:</b>三行各打出一个版本号,比如 <code>git version 2.x</code>、<code>gh version 2.x</code>、<code>v22.x</code>。哪一行说 <code>command not found</code>,就是那个没装上,回头重跑那一步。</div>
+
+<details><summary>Windows 用户</summary>
+<pre><code>winget install --id Git.Git -e
+winget install --id GitHub.cli -e
+winget install --id OpenJS.NodeJS.LTS -e</code></pre>
+<p>装完关掉 PowerShell 重开,同样用上面三条 <code>--version</code> 检查。</p></details>
+
+<!-- ============================================================ -->
+<h2 id="s3">3. 把 GitHub 账号和电脑连起来<span class="time">5 分钟</span></h2>
+<div class="box why"><b>为什么要这一步。</b>团队的日志、计划、你的 harness 都存在 GitHub 上,而且是私有的。你的电脑要能代表「你」去读写它们,就得先登录一次。这一步做完以后就不用再管了。</div>
+<pre><code>gh auth login</code></pre>
+<p>它会一步步问你问题,用 <kbd>↑</kbd><kbd>↓</kbd> 选,<kbd>回车</kbd> 确认。按下面选:</p>
+<table>
+<tr><th>它问</th><th>你选</th></tr>
+<tr><td>Where do you use GitHub?</td><td><b>GitHub.com</b></td></tr>
+<tr><td>What is your preferred protocol for Git operations?</td><td><b>HTTPS</b></td></tr>
+<tr><td>Authenticate Git with your GitHub credentials?</td><td><b>Yes</b>(输入 <code>Y</code> 回车)</td></tr>
+<tr><td>How would you like to authenticate?</td><td><b>Login with a web browser</b></td></tr>
+</table>
+<p>然后它会显示一个 8 位的一次性代码,像 <code>A1B2-C3D4</code>。<b>把这个代码记下来</b>,按回车,浏览器会自动打开 GitHub 页面。在页面里粘贴这个代码,点 Continue,再点绿色的 Authorize。回到终端,看到 <code>Logged in as 你的账号名</code> 就成了。</p>
+<p>验证一下:</p>
+<pre><code>gh auth status</code></pre>
+<div class="box ok"><b>成功的样子:</b>有一行 <code>✓ Logged in to github.com account 你的账号名</code>。</div>
+<div class="box warn"><b>浏览器没自动打开?</b>终端里会给一个网址 <code>https://github.com/login/device</code>,手动在浏览器打开,粘代码就行。</div>
+
+<!-- ============================================================ -->
+<h2 id="s4">4. 下载你的 harness<span class="time">3 分钟</span></h2>
+<div class="box why"><b>harness 是什么。</b>就是一个文件夹,里面放着:给 AI 看的规则(<code>CLAUDE.md</code>,Codex 用户看的叫 <code>AGENTS.md</code>,内容一样)、三个预先写好的命令(<code>/update</code>、<code>/diary</code>、<code>/publish-html</code>)、团队共享的日志文件夹 <code>diary/</code> 和计划文件夹 <code>plan/</code>、以及你自己放工作文件的 <code>ecop/</code>。Fengyuan 已经给每个人在 GitHub 上建好了一份,名字替换好了,你只要下载下来。</div>
+<p>把下面的 <span class="you">&lt;名字&gt;</span> 换成你的名字(两处都要换,见第 0 节的表):</p>
+<pre><code>gh repo clone ECOP-Design/<span class="you">&lt;名字&gt;</span> ~/<span class="you">&lt;名字&gt;</span> -- --recurse-submodules</code></pre>
+<p>比如 Jerry 就是:</p>
+<pre><code>gh repo clone ECOP-Design/Jerry ~/Jerry -- --recurse-submodules</code></pre>
+<p>然后走进去看一眼:</p>
+<pre><code>cd ~/<span class="you">&lt;名字&gt;</span>
+ls</code></pre>
+<div class="box ok"><b>成功的样子:</b>列出 <code>AGENTS.md  CLAUDE.md  README.md  archive  diary  ecop  plan</code>。再敲 <code>ls diary</code>,能看到五个人的文件夹和 README,说明共享日志也拉下来了。</div>
+<div class="box warn"><b>如果 <code>ls diary</code> 是空的</b>,跑一次 <code>git submodule update --init</code> 再看。</div>
+<div class="box stop"><b>如果报 <code>Repository not found</code> 或 <code>Permission denied</code>:</b>要么第 3 步没登录成功(跑 <code>gh auth status</code> 看),要么你还没被拉进 ECOP-Design 组织(找 Doubao)。</div>
+
+<!-- ============================================================ -->
+<h2 id="s5">5. 装 AI 助手<span class="time">5 分钟</span></h2>
+<p>两个选一个装。<b>一定要装命令行版本,在终端里跑。</b></p>
+<div class="box why"><b>为什么必须在终端里、而不是网页或 VS Code 插件。</b>
+<ul><li>AI 助手启动时,会自动读「当前文件夹」里的 <code>CLAUDE.md</code> / <code>AGENTS.md</code>。你在 harness 文件夹里启动它,它就知道团队的规则、知道 <code>/update</code> <code>/diary</code> 是什么。在别的地方启动它,它什么都不知道。</li>
+<li>网页版的 AI 碰不到你电脑上的文件,也碰不到 GitHub,日志和计划它都读不到、写不了。</li>
+<li>大家用同一种方式,出问题好互相帮。</li></ul></div>
+
+<h3>选项 A:Claude Code</h3>
+<pre><code>npm install -g @anthropic-ai/claude-code</code></pre>
+<p>装完,进 harness 文件夹启动它:</p>
+<pre><code>cd ~/<span class="you">&lt;名字&gt;</span>
+claude</code></pre>
+<p>第一次启动会让你选主题(随便),然后要登录。选 <b>Claude account with subscription</b>,浏览器打开后登录你的 Claude 账号、点授权,回到终端。</p>
+<p>它可能会问「Do you trust the files in this folder?」,选 <b>Yes</b>。这是你自己的 harness,放心。</p>
+<div class="box ok"><b>成功的样子:</b>看到一个输入框,上面有 Claude Code 的字样。随便打一句「你好,你现在在哪个文件夹,CLAUDE.md 里说我叫什么」,它答得出你的名字就说明规则读到了。</div>
+
+<h3>选项 B:Codex</h3>
+<pre><code>npm install -g @openai/codex</code></pre>
+<pre><code>cd ~/<span class="you">&lt;名字&gt;</span>
+codex</code></pre>
+<p>第一次启动选 <b>Sign in with ChatGPT</b>,浏览器登录、授权,回到终端。</p>
+<div class="box ok"><b>成功的样子:</b>看到 Codex 的输入框。打一句「读一下 AGENTS.md 和 CLAUDE.md,告诉我我叫什么、我该怎么开始一天」,它能说出 <code>/update</code> 就对了。</div>
+
+<h3>退出</h3>
+<p>两个都一样:打 <code>/exit</code> 回车,或者按两次 <kbd>Ctrl</kbd>+<kbd>C</kbd>。</p>
+
+<!-- ============================================================ -->
+<h2 id="s6">6. 可选:让 AI 不要每步都问你<span class="time">2 分钟</span></h2>
+<p>默认情况下,AI 每次要改文件、跑命令,都会停下来问你「可以吗?」,你得按 <kbd>y</kbd>。头几次这样挺好,能看清它在干什么。熟了以后会觉得烦,可以开「跳过确认」模式:</p>
+<table>
+<tr><th></th><th>平时启动</th><th>跳过确认模式</th></tr>
+<tr><td>Claude Code</td><td><code>claude</code></td><td><code>claude --dangerously-skip-permissions</code></td></tr>
+<tr><td>Codex</td><td><code>codex</code></td><td><code>codex --dangerously-bypass-approvals-and-sandbox</code></td></tr>
+</table>
+<div class="box stop"><b>名字里带 dangerously 不是开玩笑。</b>开了以后 AI 做什么都不问你,包括删文件、往 GitHub 推东西。我们的规则文件里写了「不删除」「不擅自 push」,但那是靠 AI 自觉遵守,不是物理上做不到。所以:
+<ul><li>只在 harness 文件夹里开。<b>先 <code>cd ~/&lt;名字&gt;</code> 再启动</b>,别在主目录或桌面开。</li>
+<li>harness 里的东西都在 GitHub 上有备份,真搞坏了找 Fengyuan 能恢复。但你自己放进 <code>ecop/</code> 的文件,要记得定期让 AI commit。</li>
+<li>Codex 的 <code>--dangerously-bypass-approvals-and-sandbox</code> 太长记不住的话,先用 <code>codex --full-auto</code>,它会少问很多但还有基本的保护。</li></ul></div>
+
+<!-- ============================================================ -->
+<h2 id="s7">7. 每天怎么用:/update → 干活 → /diary</h2>
+<p>固定三步,每次打开 AI 助手都这么来:</p>
+<ol>
+<li><b>开场:<code>/update</code></b>。它会去 GitHub 拉最新的日志和计划,告诉你队友最近两天干了什么、有没有人给你留了通知(NOTICE)、计划有没有变、你今天该接着干什么。一分钟读完,比开早会快。</li>
+<li><b>干活</b>。用大白话跟它说你要做什么。你的工作文件放 <code>ecop/</code> 里。它不会问的时候你不用管它;它问了你就回。</li>
+<li><b>收尾:<code>/diary</code></b>。它会把这次会话做的事整理成几条,写进 <code>diary/你的名字/今天日期.md</code>,然后推到 GitHub。队友明天 <code>/update</code> 就能看到。<b>不跑这一步,你今天做的事别人就不知道。</b></li>
+</ol>
+
+<h3>Claude Code 和 Codex 的小区别</h3>
+<table>
+<tr><th></th><th>Claude Code</th><th>Codex</th></tr>
+<tr><td>怎么触发 /update</td><td>直接打 <code>/update</code> 回车</td><td>打 <code>执行 /update</code> 回车(前面加「执行」两个字,免得它当成自己的内置命令)</td></tr>
+<tr><td>怎么触发 /diary</td><td>直接打 <code>/diary</code></td><td>打 <code>执行 /diary</code></td></tr>
+<tr><td>规则文件</td><td><code>CLAUDE.md</code></td><td><code>AGENTS.md</code>(它会让你去读 CLAUDE.md)</td></tr>
+</table>
+<p>说大白话也行,比如「看看大家最近都干了啥」「把今天的事记进日志」,两边都懂。</p>
+
+<div class="box why"><b>几条团队规矩,AI 知道,你也最好知道。</b>
+<ul><li><b>只写自己的日志文件夹</b>,别人的只看不改。</li>
+<li><b>不删文件</b>,过时的移到 <code>archive/</code>。</li>
+<li><b>客户的东西不进 GitHub</b>:客户的账号密码、价格表、员工个人信息,一律不放进任何仓库。日志里写「和 X 客户谈了价格」可以,写具体数字不行。</li>
+<li><b>AI 不会自己 push</b>(往 GitHub 推东西),除了 <code>/diary</code> 和 <code>/publish-html</code> 这两个预先批准的。你改了 <code>plan/</code> 里的计划想推上去,要明确跟它说「push」。</li></ul></div>
+
+<!-- ============================================================ -->
+<h2 id="s8">8. /publish-html:把网页发给别人看</h2>
+<p>你让 AI 做了一个网页(原型、报告、图表、Demo),想给队友或客户看,不用发文件、不用截图。跟它说:</p>
+<pre><code>/publish-html 那个文件.html</code></pre>
+<p>或者直接说「把这个网页发出去给我个链接」。几十秒后它给你一个链接,形如:</p>
+<pre><code>https://ecop-design.github.io/pages/<span class="you">&lt;名字&gt;</span>/2026-11-05_xxx.html</code></pre>
+<p>任何人点开就能看,手机也行。所有人发过的页面在 <a href="https://ecop-design.github.io/pages/">ecop-design.github.io/pages/</a> 能找到。</p>
+<div class="box stop"><b>这些链接是全网公开的。</b>发之前 AI 会先读一遍内容、扫一遍有没有密码密钥,但最终责任在你:含客户数据的东西不要发。发错了也不要以为删掉就没事,GitHub 的历史记录删不干净。</div>
+
+<!-- ============================================================ -->
+<h2 id="s9">9. 第一次会话做什么<span class="time">10 分钟</span></h2>
+<p>装好以后,在 harness 文件夹里启动 AI 助手,按顺序跟它说这几句:</p>
+<ol>
+<li><code>/update</code>(Codex:<code>执行 /update</code>)。它会告诉你 Fengyuan 留了一条给所有人的通知,还会发现 <code>plan/2026-11/assignments.md</code> 里你那一行是空的。</li>
+<li>「<b>把 CLAUDE.md 里『我负责』那行填上:我负责 ______。再把 plan/2026-11/assignments.md 里我那一行也填上,填完 push 到 plan 仓库。</b>」(空格里写你在 ECOP 负责的事,一句话)</li>
+<li>随便让它干点活试试手,比如「把 ecop/research/ 里的 README 看一下,然后帮我建一个今天的会议记录文件」。</li>
+<li><code>/diary</code>(Codex:<code>执行 /diary</code>)。然后去 <a href="https://github.com/ECOP-Design/person">github.com/ECOP-Design/person</a> 看看你的文件夹里是不是多了一个今天日期的文件。</li>
+</ol>
+<div class="box ok"><b>做完这四步,你就接上了。</b>明天开始就是第 7 节的三步循环。</div>
+
+<!-- ============================================================ -->
+<h2 id="s10">10. 出问题了怎么办</h2>
+<table>
+<tr><th>现象</th><th>原因和解法</th></tr>
+<tr><td><code>command not found: brew / gh / claude / codex</code></td><td>没装上,或者装完没重开终端。先关掉终端重开再试;还不行就重跑那一步的安装命令。</td></tr>
+<tr><td><code>Permission denied</code>、<code>Repository not found</code>、<code>403</code></td><td>电脑没登录 GitHub(跑 <code>gh auth status</code> 看),或者你不在 ECOP-Design 组织里(找 Doubao)。</td></tr>
+<tr><td>AI 说它不知道 <code>/update</code> 是什么</td><td>你不在 harness 文件夹里启动的。退出,<code>cd ~/&lt;名字&gt;</code>,再启动。</td></tr>
+<tr><td><code>/diary</code> 推不上去,说 <code>rejected</code> 或 <code>conflict</code></td><td>别人刚好也在推。跟 AI 说「先 pull --rebase 再 push」。它会处理。</td></tr>
+<tr><td><code>ls diary</code> 是空的</td><td>在 harness 文件夹里跑 <code>git submodule update --init</code>。</td></tr>
+<tr><td>AI 一直问我「可以吗」</td><td>正常。按 <kbd>y</kbd>。烦了看第 6 节。</td></tr>
+<tr><td>AI 说要我输 <code>gh auth login</code> 之类的命令</td><td>它需要你本人在终端操作。退出 AI(<code>/exit</code>),在终端里跑,跑完再启动 AI。Claude Code 里也可以直接打 <code>!gh auth login</code>,感叹号开头的会当作终端命令。</td></tr>
+<tr><td>Homebrew 装了半天不动</td><td>网络慢,等。超过 20 分钟就 <kbd>Ctrl</kbd>+<kbd>C</kbd> 重跑。</td></tr>
+<tr><td>别的</td><td>截图整个终端窗口,发给 Fengyuan。截图比描述管用一百倍。</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="s11">11. 名词解释</h2>
+<table>
+<tr><th>词</th><th>意思</th></tr>
+<tr><td>终端 / 命令行 / CLI</td><td>打字操作电脑的窗口。CLI = Command Line Interface,命令行界面,一个意思。</td></tr>
+<tr><td>Git</td><td>一个记录文件每次改动的工具,能回到任何历史版本。装在你电脑上。</td></tr>
+<tr><td>GitHub</td><td>一个网站,把 Git 管的文件夹放到云上,多人共享。ECOP-Design 是我们在上面的组织。</td></tr>
+<tr><td>gh</td><td>GitHub 的命令行工具,让终端能直接操作 GitHub。</td></tr>
+<tr><td>仓库(repo)</td><td>GitHub 上的一个项目文件夹。<code>ECOP-Design/person</code> 就是组织 ECOP-Design 下面叫 person 的仓库。</td></tr>
+<tr><td>clone</td><td>把 GitHub 上的仓库下载到自己电脑,只需要做一次。</td></tr>
+<tr><td>commit</td><td>给当前改动拍一张快照并写一句说明。只在本地。</td></tr>
+<tr><td>push / pull</td><td>push 是把本地的快照推到 GitHub;pull 是把 GitHub 上别人推的拉下来。</td></tr>
+<tr><td>submodule</td><td>一个仓库里嵌着另一个仓库。你 harness 里的 <code>diary/</code> 和 <code>plan/</code> 就是嵌进来的两个共享仓库。</td></tr>
+<tr><td>harness</td><td>我们对「AI 助手的工作间」的叫法:一个带规则文件的文件夹。</td></tr>
+<tr><td>CLAUDE.md / AGENTS.md</td><td>放在 harness 根目录、AI 启动时自动读的规则文件。前者 Claude Code 读,后者 Codex 读。</td></tr>
+<tr><td>斜杠命令(slash command)</td><td><code>/update</code> 这种以斜杠开头的词,对应一份预先写好的步骤说明,AI 看到就照着做。</td></tr>
+<tr><td>NOTICE</td><td>日志仓库根目录里 <code>NOTICE-日期-给谁-主题.md</code> 的文件,是定向通知。<code>/update</code> 会自动读给你听。</td></tr>
+<tr><td>GitHub Pages</td><td>GitHub 的免费网页托管。<code>/publish-html</code> 就是往那里发。</td></tr>
+</table>
+
+<footer>Fengyuan · 2026-11-01 · 源文件在 <code>leftrightworld/Fengyuan</code> 的 <code>ecop/team/</code>,有写错的地方告诉我。</footer>
+</main>
+</body>
+</html>
