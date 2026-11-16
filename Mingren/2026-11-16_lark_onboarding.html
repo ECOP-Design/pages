@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lark 工作助理上手教程 · ECOP</title>
+<style>
+:root{--ink:#18312b;--muted:#50675d;--accent:#126746;--paper:#f5f7ef;--line:#d9e3d4;--white:#fff;--green:#e9f3e6}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.75 "Inter","PingFang SC","Microsoft YaHei",sans-serif}
+a{color:var(--accent);text-underline-offset:4px}
+button,input,select{font:inherit}
+:focus-visible{outline:3px solid #a95014;outline-offset:3px}
+.wrap{width:min(1140px,calc(100% - 40px));margin:auto}
+header{background:#123b30;color:#f4f8ed;padding:56px 0 49px}
+.brand,.step{font-size:.8rem;font-weight:800;letter-spacing:.12em}
+.brand{color:#bde4be}
+h1{font-size:clamp(2rem,5.5vw,4.1rem);line-height:1.13;letter-spacing:-.04em;margin:14px 0 16px}
+header p{max-width:40rem;margin:0;color:#e0efdf}
+.layout{display:grid;grid-template-columns:220px minmax(0,1fr);gap:30px;padding-top:30px}
+nav{position:sticky;top:20px;align-self:start}
+nav ol{padding-left:22px;margin:5px 0 14px}
+nav li{padding:3px 0}
+nav a{text-decoration:none}
+nav a:hover{text-decoration:underline}
+progress{width:100%;height:10px;accent-color:var(--accent)}
+#progress-text{font-size:.85rem;color:var(--muted)}
+section{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:clamp(17px,4vw,32px);margin-bottom:20px;scroll-margin-top:12px}
+.step{color:var(--accent)}
+h2{font-size:clamp(1.35rem,3vw,1.85rem);margin:2px 0 12px;line-height:1.35}
+h3{font-size:1rem;margin:18px 0 3px}
+p,ol,ul{margin:0 0 12px}
+ol,ul{padding-left:1.45rem}
+li+li{margin-top:4px}
+.inset{background:var(--green);border-left:4px solid #49906a;padding:11px 14px;border-radius:0 8px 8px 0;margin:14px 0}
+.check{display:flex;gap:9px;align-items:baseline;margin-top:17px;width:fit-content;font-weight:650}
+.check input{accent-color:var(--accent);width:16px;height:16px}
+.clip{background:#172f29;color:#f6faf5;border-radius:11px;padding:12px 13px 12px 16px;margin:10px 0 14px;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;gap:12px}
+.clip p{margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+button{background:#edf5e9;border:1px solid #b8d0be;border-radius:7px;color:#174a35;padding:3px 10px;cursor:pointer;font-weight:650;min-height:36px}
+button:hover{background:#d9ecdb}
+label[for=day]{display:block;font-weight:700}
+input[type=date]{border:1px solid #9eb6a9;background:white;color:var(--ink);border-radius:7px;padding:6px;max-width:100%}
+.note{font-size:.9rem;color:var(--muted);margin-top:8px}
+.mock{border:1px solid var(--line);border-radius:11px;padding:12px 15px;margin:12px 0}
+.mock p:last-child{margin-bottom:0}
+figure{margin:15px 0}
+.timeline{display:grid;gap:6px;list-style:none;padding:0;margin:8px 0}
+.timeline li{display:grid;grid-template-columns:7.8rem 1fr;gap:10px;background:#f1f5ef;padding:7px 10px;border-radius:7px}
+.timeline .work{background:#dcefe1}
+figcaption{font-size:.85rem;color:var(--muted)}
+details{border-top:1px solid var(--line);padding:9px 0}
+summary{cursor:pointer;font-weight:700}
+details p{margin:6px 0 0}
+footer{padding:12px 0 38px;color:var(--muted);font-size:.9rem}
+@media(max-width:740px){.layout{display:block}nav{position:static;margin-bottom:21px}nav ol{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:15px}header{padding:37px 0 33px}}
+@media(max-width:390px){.wrap{width:calc(100% - 24px)}.clip{grid-template-columns:1fr}.clip button{justify-self:start}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<div class="brand">ECOP 员工上手教程</div>
+<h1>用 Lark 工作助理<br>记待办、收提醒、排日程</h1>
+<p>跟着做约 10 分钟。你会建好第一条待办，把做这件事的时间排进自己的日历。</p>
+<p style="margin-top:13px;font-size:.9rem">上线版草案 · 界面与对话为示意 · 使用国际版 Lark</p>
+</div></header>
+<div class="wrap layout">
+<nav aria-label="教程目录">
+<strong>跟着做</strong>
+<ol><li><a href="#connect">找到机器人并授权</a></li><li><a href="#task">建第一条待办</a></li><li><a href="#plan">把时间排进日历</a></li><li><a href="#daily">每天怎么用</a></li><li><a href="#form">从表单登记</a></li><li><a href="#help">卡住了怎么办</a></li></ol>
+<progress value="0" max="3" aria-labelledby="progress-text"></progress>
+<div id="progress-text" aria-live="polite">上手进度 0 / 3</div>
+</nav>
+<main>
+<section id="connect">
+<span class="step">第 1 步 · 2 分钟</span>
+<h2>找到机器人并授权</h2>
+<ol>
+<li>在 Lark 切到公司工作区。从团队发的入口打开「Lark 工作助理」，进入与它的私聊。</li>
+<li>按私聊里的授权提示打开 Lark 授权页，确认登录的是自己的公司账号，然后点 <strong>Authorize</strong>，回到私聊。</li>
+<li>发送下面这条消息，检查能否收到回复。</li>
+</ol>
+<div class="clip"><p id="ping">ping</p><button type="button" data-copy="ping" aria-label="复制 ping">复制</button></div>
+<div class="inset"><strong>成功的样子</strong>　私聊里收到 <code>pong</code>，就可以继续建待办。</div>
+<label class="check"><input type="checkbox" id="done-connect"> 我已经完成授权并收到回复</label>
+</section>
+<section id="task">
+<span class="step">第 2 步 · 3 分钟</span>
+<h2>创建第一条待办</h2>
+<p>选一个练习日期。下面两步会自动把日期填进可复制的消息，时间按新加坡时区解释。请选择仍有可用时间的一天。</p>
+<label for="day">练习日期</label>
+<input type="date" id="day">
+<noscript><p>请手动把示例中的「明天」改成你的练习日期。</p></noscript>
+<h3>发给机器人</h3>
+<div class="clip"><p id="task-message">帮我建一条待办「整理采购汇总」。明天下午 4 点前交，预计用时 45 分钟，提前 30 分钟提醒我。</p><button type="button" data-copy="task-message" aria-label="复制待办消息">复制</button></div>
+<div class="mock">
+<strong>你会看到的预览（示意）</strong>
+<p>整理采购汇总 · 截止 16:00 · 预计 45 分钟 · 15:30 提醒</p>
+</div>
+<p>核对标题和三个数字。都正确就发送 <code>/confirm</code>。填错了就发送 <code>/cancel</code>，把修正后的完整消息重新发一次。</p>
+<div class="inset"><strong>成功的样子</strong>　机器人回复已创建。在 Lark Tasks 找到「整理采购汇总」，打开确认截止时间和提醒。</div>
+<details><summary>截止时间和提醒时间有什么区别？</summary><p>16:00 是最晚交付时间，15:30 是提醒时间。真正动手的 45 分钟要在下一步放进日历。</p></details>
+<label class="check"><input type="checkbox" id="done-task"> 我在 Lark Tasks 里找到了这条待办</label>
+</section>
+<section id="plan">
+<span class="step">第 3 步 · 5 分钟</span>
+<h2>让机器人找时间，再写进日历</h2>
+<h3>先看可用方案</h3>
+<div class="clip"><p id="plan-message">帮我安排明天下午 1 点到 4 点的待办，避开已经在日历里的会议，先给我看排期建议。</p><button type="button" data-copy="plan-message" aria-label="复制排期消息">复制</button></div>
+<figure class="mock">
+<strong>示例 · 如果 13:00–13:30 已有会议</strong>
+<ol class="timeline"><li><b>13:00–13:30</b><span>已有会议</span></li><li class="work"><b>13:30–14:15</b><span>建议安排「整理采购汇总」</span></li><li><b>15:30</b><span>待办提醒</span></li><li><b>16:00</b><span>交付截止</span></li></ol>
+<figcaption>实际建议取决于你的日历和待办。</figcaption>
+</figure>
+<h3>把看过的方案写入日历</h3>
+<p>确认工作名称、时间和日期都对，再请求写入。</p>
+<div class="clip"><p id="apply-message">请把刚才建议的工作时段写入我的日历。先让我确认要写入的任务和时间。</p><button type="button" data-copy="apply-message" aria-label="复制写入日历消息">复制</button></div>
+<p>按机器人提示确认，再打开 <strong>Lark Calendar</strong>，切到练习日期，检查时段是否出现在自己的日历里。</p>
+<div class="inset"><strong>成功的样子</strong>　Tasks 里有交付和提醒，Calendar 里有你留给这项工作的时间。</div>
+<label class="check"><input type="checkbox" id="done-plan"> 我在 Lark Calendar 里看到了这个工作时段</label>
+</section>
+<section id="daily">
+<h2>每天怎么用</h2>
+<ol><li><strong>开工时排今天。</strong> 先给机器人一个实际可工作的时段。要保护的会议和私人时段先留在日历里。</li>
+<li><strong>来新工作就记。</strong> 一条消息尽量带上交付内容、截止时间、预计工时、提醒。如果有人在等这份交付，也一并写明。</li>
+<li><strong>有变动先看新方案。</strong> 说清楚是哪项工作、哪个时段冲突，再让机器人推荐空档。确认改动后去 Calendar 核对。</li>
+<li><strong>做完就勾掉。</strong> 在 Tasks 标记完成。下一次排期从剩余待办开始。</li></ol>
+<details><summary>为什么一件事排在另一件前面？</summary><p>排序参考离截止还有多久、交付的业务影响，以及别的工作是否在等它。员工可以补充工作影响和实际阻塞情况。团队负责人在 Base 维护默认权重。排期还受日历空档和截止时间约束。</p></details>
+</section>
+<section id="form">
+<h2>团队要求统一登记时，用 Base 表单</h2>
+<ol><li>打开团队给你的工作项表单，用本人的公司 Lark 账号填写标题、截止时间、预计分钟和提前提醒分钟。</li><li>提交后回到同一账号的机器人私聊，发送下面这条。</li></ol>
+<div class="clip"><p id="import-message">/import</p><button type="button" data-copy="import-message" aria-label="复制导入指令">复制</button></div>
+<div class="inset"><strong>成功的样子</strong>　机器人列出已导入的任务。在 Tasks 查看结果。每项工作选一个登记入口，已经提交表单就从这条记录导入。</div>
+</section>
+<section id="help">
+<h2>卡住了怎么办</h2>
+<details open><summary>找不到机器人，或授权后仍提示无权限</summary><p>核对当前公司工作区和登录账号，再从团队提供的入口进入。仍报错时，发提示给负责上线的管理员。</p></details>
+<details><summary>明明有空，机器人却排不下</summary><p>核对截止时间前有没有足够长的连续空档。可以扩大可用窗口，或说明哪些任务能拆分。跨时区时在消息里写明时区。</p></details>
+<details><summary>忘了确认，或预览里的时间填错</summary><p>重发一条包含完整信息的请求，核对新预览后再确认。</p></details>
+<details><summary>没收到提醒</summary><p>在 Tasks 打开任务核对截止时间、提醒时间和通知设置。给管理员说明任务标题、预期提醒时间和时区。</p></details>
+<details><summary>已经建了任务或日程，但回填失败</summary><p>先在 Tasks 或 Calendar 核对已有对象，把机器人返回的任务或日程 ID 发给管理员补记，避免重复创建。</p></details>
+<details><summary>需要报一个问题</summary><p>发给管理员你做到第几步、发了哪句、机器人怎么回，以及脱敏后的截图。页面提示有错误码时，把错误码一起带上。</p></details>
+</section>
+<footer>ECOP · Lark 工作助理 · 2026-11-16</footer>
+</main>
+</div>
+<script>
+const day = document.getElementById('day');
+const tomorrow = new Date(Date.now() + 86400000);
+const parts = Object.fromEntries(new Intl.DateTimeFormat('en-GB', {
+  timeZone:'Asia/Singapore', year:'numeric', month:'2-digit', day:'2-digit'
+}).formatToParts(tomorrow).map(({type,value}) => [type,value]));
+day.value = [parts.year, parts.month, parts.day].join('-');
+function fillExamples() {
+  const [year, month, date] = day.value.split('-');
+  const label = day.value ? year + '年' + Number(month) + '月' + Number(date) + '日' : '明天';
+  document.getElementById('task-message').textContent =
+    '帮我建一条待办「整理采购汇总」。' + label + '下午 4 点前交，预计用时 45 分钟，提前 30 分钟提醒我。';
+  document.getElementById('plan-message').textContent =
+    '帮我安排' + label + '下午 1 点到 4 点的待办，避开已经在日历里的会议，先给我看排期建议。';
+}
+day.addEventListener('input', fillExamples);
+fillExamples();
+
+for (const button of document.querySelectorAll('[data-copy]')) {
+  button.addEventListener('click', async () => {
+    const message = document.getElementById(button.dataset.copy);
+    try {
+      await navigator.clipboard.writeText(message.textContent);
+      button.textContent = '已复制';
+    } catch {
+      const selection = window.getSelection();
+      const range = document.createRange();
+      range.selectNodeContents(message);
+      selection.removeAllRanges();
+      selection.addRange(range);
+      button.textContent = '已选中，请复制';
+    }
+    window.setTimeout(() => { button.textContent = '复制'; }, 2400);
+  });
+}
+const boxes = Array.from(document.querySelectorAll('.check input'));
+function updateProgress() {
+  const count = boxes.filter(box => box.checked).length;
+  document.querySelector('progress').value = count;
+  document.getElementById('progress-text').textContent = '上手进度 ' + count + ' / ' + boxes.length;
+}
+for (const box of boxes) {
+  try { box.checked = localStorage.getItem('lark-guide:' + box.id) === 'true'; } catch {}
+  box.addEventListener('change', () => {
+    try { localStorage.setItem('lark-guide:' + box.id, String(box.checked)); } catch {}
+    updateProgress();
+  });
+}
+updateProgress();
+</script>
+</body>
+</html>
